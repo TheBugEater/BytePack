@@ -1,5 +1,8 @@
 #pragma once
-#include "Reflection\BPClass.h"
+#ifndef __BP_OBJECT_H__
+#define __BP_OBJECT_H__
+
+#include "Reflection/BPClass.h"
 
 class BPObject : public BPSmartPtrObj
 {
@@ -8,3 +11,4 @@ class BPObject : public BPSmartPtrObj
 	std::string GetClassName() { return GetClass()->GetClassName(); }
 };
 
+#endif

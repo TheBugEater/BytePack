@@ -1,4 +1,7 @@
 #pragma once
+#ifndef __BP_SMART_PTR_H__
+#define __BP_SMART_PTR_H__
+
 #define SAFE_AddRef(x) if(x) { ((BPSmartPtrObj*)x)->AddRef(); }
 #define SAFE_ReleaseRef(x) if(x) { ((BPSmartPtrObj*)x)->ReleaseRef(); }
 
@@ -102,3 +105,5 @@ template<class T> T& BPSmartPtr<T>::operator*()
 {
 	return *this->Reference;
 }
+
+#endif

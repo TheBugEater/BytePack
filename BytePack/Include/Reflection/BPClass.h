@@ -1,17 +1,17 @@
 #pragma once
+#ifndef __BP_CLASS_H__
+#define __BP_CLASS_H__
 
-#include <map>
 #include "Reflection/BPClassFactory.h"
 #include "Reflection/BPProperty.h"
-#include "Reflection/BPClassBuilder.h"
-#include "BPSmartPtr.h"
- 
-enum PropertyFlag
-{
-	Writable = (0 << 0),
-	Readable = (0 << 1),
-	ReadWrite = (Writable + Readable)
-};
+#include "Reflection/BPSmartPtr.h"
+
+#define Writable = (0 << 0)
+#define Readable = (0 << 1)
+#define ReadWrite = (Writable + Readable)
+
+#include <map>
+#include <vector>
 
 #define BP_REFLECT(CLASS) \
 public:\
@@ -104,3 +104,45 @@ void BPClass::GetPropertyValue(ClassType* obj, std::string name)
 	ObjectProperty<ClassType>* ClassObj = dynamic_cast<ObjectProperty<ClassType>*>(Property);
 	ClassObj->GetValue(obj);
 }
+
+template<class T>
+class BPClassBuilder
+{
+public:
+	BPClassBuilder(BPClass* classObject)
+		: ClassObject(classObject)
+	{
+
+	}
+
+	template<class MemberType>
+	BPClassBuilder<T>& Property(MemberType T::* member, std::string name, std::string description = "", unsigned int flags = 2)
+	{
+		Properties.push_back(new MemberProperty<T, MemberType>(member, name, description, flags));
+		return *this;
+	}
+
+	template<class MemberType>
+	BPClassBuilder<T>& Property(MemberType T::* member, std::string name, unsigned int flags)
+	{
+		Properties.push_back(new MemberProperty<T, MemberType>(member, name, "", flags));
+		return *this;
+	}
+
+	BPClass* Build()
+	{
+		for (unsigned i = 0; i < Properties.size(); i++)
+		{
+			ClassObject->AddProperty(Properties[i]);
+		}
+		return ClassObject;
+	}
+
+private:
+	BPClass* ClassObject;
+
+	std::vector<ObjectProperty<T>*> Properties;
+};
+
+
+#endif

@@ -1,4 +1,7 @@
 #pragma once
+#ifndef __BP_CLASS_FACTORY_H__
+#define __BP_CLASS_FACTORY_H__
+
 #include <string>
 
 class BPClassFactory
@@ -22,3 +25,4 @@ private:
 	static BPClassFactory* StaticInstance;
 };
 
+#endif

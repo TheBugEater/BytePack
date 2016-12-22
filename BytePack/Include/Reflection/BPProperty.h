@@ -1,4 +1,6 @@
 #pragma once
+#ifndef __BP_PROPERTY_H__
+#define __BP_PROPERTY_H__
 
 class AbstractProperty
 {
@@ -32,7 +34,7 @@ public:
 
 	typedef MemberType ClassType::* MemberPointer;
 	MemberProperty(MemberPointer member, std::string name, std::string description, unsigned int flags)
-		: ObjectProperty(name, description, flags)
+		: ObjectProperty<ClassType>(name, description, flags)
 		, Member(member)
 	{
 
@@ -50,3 +52,5 @@ public:
 
 	MemberPointer Member;
 };
+
+#endif
