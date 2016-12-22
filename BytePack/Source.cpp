@@ -6,7 +6,7 @@ class Test : public BPObject
 {
 	BP_REFLECT(Test)
 
-		int id;
+	int id;
 };
 
 BP_BEGIN_CLASS(Test, BPObject)
@@ -14,7 +14,7 @@ BP_BEGIN_CLASS(Test, BPObject)
 .Build()
 BP_END_CLASS(Test)
 
-class Test2
+class Test2 : public BPObject
 {
 	BP_REFLECT(Test2)
 
@@ -22,7 +22,7 @@ class Test2
 	std::string name;
 };
 
-BP_BEGIN_CLASS(Test2, BPObject, 0)
+BP_BEGIN_CLASS(Test2, BPObject)
 .Property(&Test2::val, "val", "Value", Readable | Writable)
 .Property(&Test2::name, "name", "Name Property", Readable)
 .Build()
@@ -30,10 +30,8 @@ BP_END_CLASS(Test2)
 
 int main()
 {
-	Test test;
-	test.id = 10;
-
-	Test::StaticClass->SetPropertyValue(&test, "id");
+	auto TestClass = BPClassFactory::Instance()->FindClassByName("Test");
+	auto TestInstance = TestClass->CreateInstance();
 
 	auto Classes = BPClassFactory::Instance()->GetClasses();
 	while (Classes)

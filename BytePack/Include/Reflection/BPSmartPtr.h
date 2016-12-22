@@ -57,6 +57,8 @@ public:
 	inline BPSmartPtr<T>& operator=(T* ref);
 	inline BPSmartPtr<T>& operator=(const BPSmartPtr<T>& ref);
 
+	template<class T2> inline BPSmartPtr<T>& operator=( const BPSmartPtr<T2>& cpy );
+
 	inline T* operator->();
 	inline const T* operator->() const;
 	inline T& operator*();
@@ -76,6 +78,14 @@ template<class T> BPSmartPtr<T>& BPSmartPtr<T>::operator=(const BPSmartPtr<T>& r
 {
 	this->Reference = ref.Reference;
 	SAFE_AddRef(this->Reference);
+}
+
+template<class T> template<class T2> inline BPSmartPtr<T>& BPSmartPtr<T>::operator=(const BPSmartPtr<T2>& copy)
+{
+	SAFE_ReleaseRef(this->Reference);
+	this->Reference = copy.Reference;
+	SAFE_AddRef(this->Reference);
+	return *this;
 }
 
 template<class T> T* BPSmartPtr<T>::operator->()

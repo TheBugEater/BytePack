@@ -29,3 +29,16 @@ BPClass* BPClassFactory::GetNextClass(BPClass* Class)
 	return Class->NextClass;
 }
 
+BPClass* BPClassFactory::FindClassByName(std::string className)
+{
+	auto Class = ReflectedClasses;
+	while (Class)
+	{
+		if (Class->GetClassName() == className)
+			return Class;
+
+		Class = Class->NextClass;
+	}
+
+	return nullptr;
+}

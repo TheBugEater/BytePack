@@ -1,6 +1,5 @@
 #pragma once
 #include "Reflection\BPClass.h"
-#include "Reflection\BPSmartPtr.h"
 
 class BPObject : public BPSmartPtrObj
 {

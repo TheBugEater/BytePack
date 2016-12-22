@@ -4,6 +4,7 @@
 #include "Reflection/BPClassFactory.h"
 #include "Reflection/BPProperty.h"
 #include "Reflection/BPClassBuilder.h"
+#include "BPSmartPtr.h"
  
 enum PropertyFlag
 {
@@ -31,7 +32,7 @@ public: \
 	{ \
 		BuildProperties(); \
 	} \
-	BPSmartPtr<CLASS> CreateInstance() { return new CLASS(); } \
+	virtual BPSmartPtr<class BPObject> CreateInstance() { return new CLASS(); } \
 private: \
 	void BuildProperties() \
 	{ \
@@ -54,6 +55,8 @@ public:
 	{
 		BPClassFactory::Instance()->RegisterClass(this);
 	}
+
+	virtual BPSmartPtr<class BPObject> CreateInstance() { return nullptr; } \
 
 	inline std::string& GetClassName() { return ClassName; }
 	inline BPClass* GetBaseClass() { return SuperClass; }
