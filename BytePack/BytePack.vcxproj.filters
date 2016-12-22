@@ -30,6 +30,15 @@
     <ClInclude Include="Include\Reflection\BPObject.h">
       <Filter>Header Files\Reflection</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Reflection\BPClassBuilder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Reflection\BPProperty.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Reflection\BPSmartPtr.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Reflection\BPClass.cpp">
@@ -40,6 +49,12 @@
     </ClCompile>
     <ClCompile Include="Source\Reflection\BPObject.cpp">
       <Filter>Source Files\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Reflection\BPSmartPtr.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

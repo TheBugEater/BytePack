@@ -1,12 +1,4 @@
 #include "Reflection/BPObject.h"
 
-
-
-BPObject::BPObject()
-{
-}
-
-
-BPObject::~BPObject()
-{
-}
+BP_BEGIN_CLASS_ROOT(BPObject, 0)
+BP_END_CLASS(BPObject)

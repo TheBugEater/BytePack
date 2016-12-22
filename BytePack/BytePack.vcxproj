@@ -20,13 +20,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Reflection\BPClass.h" />
+    <ClInclude Include="Include\Reflection\BPClassBuilder.h" />
     <ClInclude Include="Include\Reflection\BPClassFactory.h" />
     <ClInclude Include="Include\Reflection\BPObject.h" />
+    <ClInclude Include="Include\Reflection\BPProperty.h" />
+    <ClInclude Include="Include\Reflection\BPSmartPtr.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source.cpp" />
     <ClCompile Include="Source\Reflection\BPClass.cpp" />
     <ClCompile Include="Source\Reflection\BPClassFactory.cpp" />
     <ClCompile Include="Source\Reflection\BPObject.cpp" />
+    <ClCompile Include="Source\Reflection\BPSmartPtr.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DF2A8F84-41D7-4C79-82CB-6C9D9E037C90}</ProjectGuid>
@@ -87,6 +92,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessToFile>false</PreprocessToFile>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
