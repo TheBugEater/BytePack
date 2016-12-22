@@ -40,12 +40,12 @@ public:
 
 	virtual void GetValue(ClassType* object) override
 	{
-		// return object->*Member;
+		object->*Member;
 	}
 
 	virtual void SetValue(ClassType* object) override
 	{
-		// object->*Member = value;
+		object->*Member;
 	}
 
 	MemberPointer Member;

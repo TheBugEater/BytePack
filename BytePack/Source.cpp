@@ -9,8 +9,8 @@ class Test : public BPObject
 		int id;
 };
 
-BP_BEGIN_CLASS(Test, BPObject, 0)
-.Property(&Test::id, "id", "An ID", 0)
+BP_BEGIN_CLASS(Test, BPObject)
+.Property(&Test::id, "id", "An ID", Readable | Writable)
 .Build()
 BP_END_CLASS(Test)
 
@@ -23,13 +23,18 @@ class Test2
 };
 
 BP_BEGIN_CLASS(Test2, BPObject, 0)
-.Property(&Test2::val, "val", "Value", 0)
-.Property(&Test2::name, "name", "Name Property", 0)
+.Property(&Test2::val, "val", "Value", Readable | Writable)
+.Property(&Test2::name, "name", "Name Property", Readable)
 .Build()
 BP_END_CLASS(Test2)
 
 int main()
 {
+	Test test;
+	test.id = 10;
+
+	Test::StaticClass->SetPropertyValue(&test, "id");
+
 	auto Classes = BPClassFactory::Instance()->GetClasses();
 	while (Classes)
 	{
