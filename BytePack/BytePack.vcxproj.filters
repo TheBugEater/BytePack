@@ -30,9 +30,6 @@
     <ClInclude Include="Include\Reflection\BPObject.h">
       <Filter>Header Files\Reflection</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Reflection\BPClassBuilder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Reflection\BPProperty.h">
       <Filter>Header Files</Filter>
     </ClInclude>

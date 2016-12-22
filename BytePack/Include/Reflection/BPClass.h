@@ -6,9 +6,12 @@
 #include "Reflection/BPProperty.h"
 #include "Reflection/BPSmartPtr.h"
 
-#define Writable = (0 << 0)
-#define Readable = (0 << 1)
-#define ReadWrite = (Writable + Readable)
+enum PropertyFlags
+{
+	Writable = (0 << 0),
+	Readable = (0 << 1),
+	ReadWrite = (Writable + Readable)
+};
 
 #include <map>
 #include <vector>
