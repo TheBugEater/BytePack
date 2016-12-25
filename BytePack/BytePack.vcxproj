@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BPVariant.h" />
     <ClInclude Include="Include\Reflection\BPClass.h" />
     <ClInclude Include="Include\Reflection\BPClassFactory.h" />
     <ClInclude Include="Include\Reflection\BPObject.h" />
@@ -26,6 +27,7 @@
     <ClInclude Include="Include\Reflection\BPSmartPtr.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BPVariant.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Source\Reflection\BPClass.cpp" />
     <ClCompile Include="Source\Reflection\BPClassFactory.cpp" />

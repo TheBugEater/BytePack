@@ -6,11 +6,11 @@ class Test : public BPObject
 {
 	BP_REFLECT(Test)
 
-	int id;
+	int ID;
 };
 
 BP_BEGIN_CLASS(Test, BPObject)
-.Property(&Test::id, "id", "An ID", Readable | Writable)
+.Property(&Test::ID, "id", "An Integer for Saving the ID", Readable | Writable)
 .Build()
 BP_END_CLASS(Test)
 
@@ -18,20 +18,19 @@ class Test2 : public BPObject
 {
 	BP_REFLECT(Test2)
 
-	char val;
-	std::string name;
+	char Character;
+	std::string Name;
 };
 
 BP_BEGIN_CLASS(Test2, BPObject)
-.Property(&Test2::val, "val", "Value", Readable | Writable)
-.Property(&Test2::name, "name", "Name Property", Readable)
+.Property(&Test2::Character, "character", "Char Example", Readable | Writable)
+.Property(&Test2::Name, "name", "Reflecting a Name String", Readable)
 .Build()
 BP_END_CLASS(Test2)
 
 int main()
 {
 	auto TestClass = BPClassFactory::Instance()->FindClassByName("Test");
-	auto TestInstance = TestClass->CreateInstance();
 
 	auto Classes = BPClassFactory::Instance()->GetClasses();
 	while (Classes)
@@ -40,10 +39,17 @@ int main()
 		auto it = Classes->GetProperties().begin();
 		while(it != Classes->GetProperties().end())
 		{
-			std::cout << "  Property : " << it->second->PropertyName.c_str() << " | " << it->second->PropertyDescription.c_str()<<std::endl;
+			std::cout << "----> Property : " << it->second->PropertyName.c_str() << " | \"" << it->second->PropertyDescription.c_str()<< "\"" << std::endl;
 			++it;
 		}
+		std::cout << "____________________" << std::endl;
 		Classes = BPClassFactory::Instance()->GetNextClass(Classes);
 	}
+
+	Test test;
+	test.ID = 1003;
+
+	//auto val = Test::StaticClass->GetPropertyValue(&test, "id");
+	//std::cout << std::endl << val->GetValue<int>();
 	_getch();
 }

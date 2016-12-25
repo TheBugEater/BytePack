@@ -1,6 +1,7 @@
 #pragma once
 #ifndef __BP_PROPERTY_H__
 #define __BP_PROPERTY_H__
+#include "../BPVariant.h"
 
 class AbstractProperty
 {
@@ -23,8 +24,8 @@ public:
 		PropertyFlags = flags;
 	}
 
-	virtual void GetValue(ClassType* object) = 0;
-	virtual void SetValue(ClassType* object) = 0;
+	virtual BPSmartPtr<BPVariant>& GetValue(ClassType* object) = 0;
+	virtual void SetValue(BPSmartPtr<BPVariant>& value, ClassType* object) = 0;
 };
 
 template<class ClassType, class MemberType>
@@ -40,14 +41,16 @@ public:
 
 	}
 
-	virtual void GetValue(ClassType* object) override
+	virtual BPSmartPtr<BPVariant>& GetValue(ClassType* object) override
 	{
-		object->*Member;
+		BPVariant* value = new BPVariant();
+		value->SetValue<MemberType>(object->*Member);
+		return BPSmartPtr<BPVariant>(value);
 	}
 
-	virtual void SetValue(ClassType* object) override
+	virtual void SetValue(BPSmartPtr<BPVariant>& value, ClassType* object) override
 	{
-		object->*Member;
+		object->*Member = value->GetValue<MemberType>();
 	}
 
 	MemberPointer Member;

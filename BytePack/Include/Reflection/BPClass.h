@@ -66,10 +66,10 @@ public:
 	inline TypeProperties& GetProperties() { return Properties; }
 
 	template<class ClassType>
-	void SetPropertyValue(ClassType* obj, std::string name);
+	void SetPropertyValue(ClassType* obj, BPSmartPtr<BPVariant>& value, std::string name);
 
 	template<class ClassType>
-	void GetPropertyValue(ClassType* obj, std::string name);
+	BPSmartPtr<BPVariant>& GetPropertyValue(ClassType* obj, std::string name);
 
 	template<class ClassType>
 	void AddProperty(ObjectProperty<ClassType>* property);
@@ -93,19 +93,19 @@ void BPClass::AddProperty(ObjectProperty<ClassType>* property)
 }
 
 template<class ClassType>
-void BPClass::SetPropertyValue(ClassType* obj, std::string name)
+void BPClass::SetPropertyValue(ClassType* obj, BPSmartPtr<BPVariant>& value, std::string name)
 {
 	auto Property = Properties[std::hash<std::string>{}(name)];
 	ObjectProperty<ClassType>* ClassObj = dynamic_cast<ObjectProperty<ClassType>*>(Property);
-	ClassObj->SetValue(obj);
+	ClassObj->SetValue(value, obj);
 }
 
 template<class ClassType>
-void BPClass::GetPropertyValue(ClassType* obj, std::string name)
+BPSmartPtr<BPVariant>& BPClass::GetPropertyValue(ClassType* obj, std::string name)
 {
 	auto Property = Properties[std::hash<std::string>{}(name)];
 	ObjectProperty<ClassType>* ClassObj = dynamic_cast<ObjectProperty<ClassType>*>(Property);
-	ClassObj->GetValue(obj);
+	return ClassObj->GetValue(obj);
 }
 
 template<class T>

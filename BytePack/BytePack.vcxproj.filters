@@ -36,6 +36,9 @@
     <ClInclude Include="Include\Reflection\BPSmartPtr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BPVariant.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Reflection\BPClass.cpp">
@@ -51,6 +54,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Reflection\BPSmartPtr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BPVariant.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
