@@ -11,46 +11,44 @@ public:
 	std::string PropertyName;
 	std::string PropertyDescription;
 	unsigned int PropertyFlags;
-};
+	ValueTypes ValueType;
 
-template<class ClassType>
-class ObjectProperty : public AbstractProperty
-{
-public:
-	ObjectProperty(std::string name, std::string description, unsigned int flags)
+	AbstractProperty(std::string name, std::string description, unsigned int flags)
 	{
 		PropertyName = name;
 		PropertyDescription = description;
 		PropertyFlags = flags;
 	}
 
-	virtual BPSmartPtr<BPVariant>& GetValue(ClassType* object) = 0;
-	virtual void SetValue(BPSmartPtr<BPVariant>& value, ClassType* object) = 0;
+	virtual BPSmartPtr<BPVariant> GetValue(BPObject* object) = 0;
+	virtual void SetValue(BPSmartPtr<BPVariant> value, BPObject* object) = 0;
 };
 
 template<class ClassType, class MemberType>
-class MemberProperty : public ObjectProperty<ClassType>
+class MemberProperty : public AbstractProperty
 {
 public:
 
 	typedef MemberType ClassType::* MemberPointer;
 	MemberProperty(MemberPointer member, std::string name, std::string description, unsigned int flags)
-		: ObjectProperty<ClassType>(name, description, flags)
+		: AbstractProperty(name, description, flags)
 		, Member(member)
 	{
-
+		ValueType = ToValueType<MemberType>();
 	}
 
-	virtual BPSmartPtr<BPVariant>& GetValue(ClassType* object) override
+	virtual BPSmartPtr<BPVariant> GetValue(BPObject* object) override
 	{
 		BPVariant* value = new BPVariant();
-		value->SetValue<MemberType>(object->*Member);
-		return BPSmartPtr<BPVariant>(value);
+		ClassType* ClassObj = dynamic_cast<ClassType*>(object);
+		value->SetValue<MemberType>(ClassObj->*Member);
+		return value;
 	}
 
-	virtual void SetValue(BPSmartPtr<BPVariant>& value, ClassType* object) override
+	virtual void SetValue(BPSmartPtr<BPVariant> value, BPObject* object) override
 	{
-		object->*Member = value->GetValue<MemberType>();
+		ClassType* ClassObj = dynamic_cast<ClassType*>(object);
+		ClassObj->*Member = value->GetValue<MemberType>();
 	}
 
 	MemberPointer Member;

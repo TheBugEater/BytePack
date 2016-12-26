@@ -6,6 +6,9 @@
 #include "Reflection/BPProperty.h"
 #include "Reflection/BPSmartPtr.h"
 
+#include <map>
+#include <vector>
+
 enum PropertyFlags
 {
 	Writable = (0 << 0),
@@ -13,13 +16,10 @@ enum PropertyFlags
 	ReadWrite = (Writable + Readable)
 };
 
-#include <map>
-#include <vector>
-
 #define BP_REFLECT(CLASS) \
 public:\
 static class BPClass* StaticClass; \
-virtual class BPClass* GetClass() { return CLASS::StaticClass; }
+virtual class BPClass* GetClass() { return CLASS::StaticClass; } 
 
 #define BP_BEGIN_CLASS_ROOT(CLASS) \
 BP_BEGIN_IMPL_CLASS(CLASS, NULL)
@@ -45,7 +45,7 @@ private: \
 	} \
 }; \
 CLASS##Class __##CLASS##ClassObj; \
-BPClass* CLASS::StaticClass = &__##CLASS##ClassObj;
+BPClass* CLASS::StaticClass = &__##CLASS##ClassObj; 
 
 class BPClass
 {
@@ -59,20 +59,21 @@ public:
 		BPClassFactory::Instance()->RegisterClass(this);
 	}
 
-	virtual BPSmartPtr<class BPObject> CreateInstance() { return nullptr; } \
+	virtual ~BPClass();
+
+	virtual BPSmartPtr<class BPObject> CreateInstance() { return nullptr; } 
 
 	inline std::string& GetClassName() { return ClassName; }
 	inline BPClass* GetBaseClass() { return SuperClass; }
 	inline TypeProperties& GetProperties() { return Properties; }
 
 	template<class ClassType>
-	void SetPropertyValue(ClassType* obj, BPSmartPtr<BPVariant>& value, std::string name);
+	void SetPropertyValue(ClassType* obj, BPSmartPtr<BPVariant> value, std::string name);
 
 	template<class ClassType>
-	BPSmartPtr<BPVariant>& GetPropertyValue(ClassType* obj, std::string name);
+	BPSmartPtr<BPVariant> GetPropertyValue(ClassType* obj, std::string name);
 
-	template<class ClassType>
-	void AddProperty(ObjectProperty<ClassType>* property);
+	void AddProperty(AbstractProperty* property);
 
 private:
 
@@ -87,25 +88,17 @@ private:
 };
 
 template<class ClassType>
-void BPClass::AddProperty(ObjectProperty<ClassType>* property)
-{
-	Properties[std::hash<std::string>{}(property->PropertyName)] = property;
-}
-
-template<class ClassType>
-void BPClass::SetPropertyValue(ClassType* obj, BPSmartPtr<BPVariant>& value, std::string name)
+void BPClass::SetPropertyValue(ClassType* obj, BPSmartPtr<BPVariant> value, std::string name)
 {
 	auto Property = Properties[std::hash<std::string>{}(name)];
-	ObjectProperty<ClassType>* ClassObj = dynamic_cast<ObjectProperty<ClassType>*>(Property);
 	ClassObj->SetValue(value, obj);
 }
 
 template<class ClassType>
-BPSmartPtr<BPVariant>& BPClass::GetPropertyValue(ClassType* obj, std::string name)
+BPSmartPtr<BPVariant> BPClass::GetPropertyValue(ClassType* obj, std::string name)
 {
 	auto Property = Properties[std::hash<std::string>{}(name)];
-	ObjectProperty<ClassType>* ClassObj = dynamic_cast<ObjectProperty<ClassType>*>(Property);
-	return ClassObj->GetValue(obj);
+	return Property->GetValue(obj);
 }
 
 template<class T>
@@ -144,7 +137,7 @@ public:
 private:
 	BPClass* ClassObject;
 
-	std::vector<ObjectProperty<T>*> Properties;
+	std::vector<AbstractProperty*> Properties;
 };
 
 

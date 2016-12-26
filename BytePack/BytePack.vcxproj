@@ -88,6 +88,9 @@
     <IncludePath>$(SolutionDir)\BytePack\Include;$(IncludePath)</IncludePath>
     <SourcePath>$(SolutionDir)\BytePack\Source;$(SourcePath)</SourcePath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>E:\Code\Reflection\BytePack\BytePack\Include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>

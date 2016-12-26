@@ -1,3 +1,8 @@
+#ifdef _WIN32 && _DEBUG
+#include "vld.h" 
+#pragma comment(lib, "vld.lib")
+#endif
+
 #include <conio.h>
 #include <iostream>
 #include "Reflection\BPObject.h"
@@ -7,10 +12,12 @@ class Test : public BPObject
 	BP_REFLECT(Test)
 
 	int ID;
+	float floatVal;
 };
 
 BP_BEGIN_CLASS(Test, BPObject)
 .Property(&Test::ID, "id", "An Integer for Saving the ID", Readable | Writable)
+.Property(&Test::floatVal, "floatVal", "A Float Value", Readable | Writable)
 .Build()
 BP_END_CLASS(Test)
 
@@ -19,14 +26,44 @@ class Test2 : public BPObject
 	BP_REFLECT(Test2)
 
 	char Character;
-	std::string Name;
+	Test* test;
 };
 
 BP_BEGIN_CLASS(Test2, BPObject)
 .Property(&Test2::Character, "character", "Char Example", Readable | Writable)
-.Property(&Test2::Name, "name", "Reflecting a Name String", Readable)
+.Property(&Test2::test, "test", "Reflecting a Pointer Object", Readable)
 .Build()
 BP_END_CLASS(Test2)
+
+void PopulateClass(BPObject* Object)
+{
+	auto Class = Object->GetClass();
+	auto it = Class->GetProperties().begin();
+	while (it != Class->GetProperties().end())
+	{
+		auto val = Class->GetPropertyValue(Object, it->second->PropertyName);
+		std::cout << "Property : " << it->second->PropertyName << " = ";
+
+		if (val->GetType() == ValueTypes::TypeObject)
+		{
+			PopulateClass(val->GetValue<BPObject*>());
+		}
+		else if (val->GetType() == ValueTypes::TypeInt)
+		{
+			std::cout << val->GetValue<int>() << std::endl;
+		}
+		else if (val->GetType() == ValueTypes::TypeChar)
+		{
+			std::cout << val->GetValue<char>() << std::endl;
+		}
+		else if (val->GetType() == ValueTypes::TypeFloat)
+		{
+			std::cout << val->GetValue<float>() << std::endl;
+		}
+		std::cout << std::endl;
+		++it;
+	}
+}
 
 int main()
 {
@@ -46,10 +83,14 @@ int main()
 		Classes = BPClassFactory::Instance()->GetNextClass(Classes);
 	}
 
-	Test test;
-	test.ID = 1003;
+	Test test1;
+	test1.ID = 30;
+	test1.floatVal = 520.042f;
+	Test2 test2;
+	test2.Character = 'H';
+	test2.test = &test1;
 
-	//auto val = Test::StaticClass->GetPropertyValue(&test, "id");
-	//std::cout << std::endl << val->GetValue<int>();
+	PopulateClass(&test2);
+
 	_getch();
 }

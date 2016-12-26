@@ -1,8 +1,62 @@
 #pragma once
+#ifndef __BP_VARIANT_H__
+#define __BP_VARIANT_H__
+
 #include "Reflection/BPSmartPtr.h"
 #include <type_traits>
 #include <string>
 #include <assert.h>
+
+class BPObject;
+
+enum class ValueTypes
+{
+	TypeChar,
+	TypeBool,
+	TypeInt,
+	TypeFloat,
+	TypeDouble,
+	TypeLong,
+	TypeString,
+	TypeObject
+};
+
+template<typename Type>
+static ValueTypes ToValueType()
+{
+	if (typeid(char).hash_code() == typeid(Type).hash_code())
+	{
+		return ValueTypes::TypeChar;
+	}
+	else if (typeid(bool).hash_code() == typeid(Type).hash_code())
+	{
+		return ValueTypes::TypeBool;
+	}
+	else if (typeid(int).hash_code() == typeid(Type).hash_code())
+	{
+		return ValueTypes::TypeInt;
+	}
+	else if (typeid(float).hash_code() == typeid(Type).hash_code())
+	{
+		return ValueTypes::TypeFloat;
+	}
+	else if (typeid(double).hash_code() == typeid(Type).hash_code())
+	{
+		return ValueTypes::TypeDouble;
+	}
+	else if (typeid(long).hash_code() == typeid(Type).hash_code())
+	{
+		return ValueTypes::TypeLong;
+	}
+	else if (typeid(std::string).hash_code() == typeid(Type).hash_code())
+	{
+		return ValueTypes::TypeString;
+	}
+	else
+	{
+		return ValueTypes::TypeObject;
+	}
+}
 
 template <size_t arg1, size_t ... others>
 struct TypeMax;
@@ -44,6 +98,8 @@ public:
 
 	typedef std::aligned_storage <TypeSize::size,TypeAlign::size>::type StorageData;
 
+	ValueTypes GetType() const { return ValueType; }
+
 	StorageData Data;
 	size_t TypeID;
 
@@ -52,6 +108,7 @@ public:
 	{
 		new (&Data) Type(value);
 		TypeID = typeid(Type).hash_code();
+		ValueType = ToValueType<Type>();
 	}
 
 	template<typename Type>
@@ -61,5 +118,18 @@ public:
 
 		return *reinterpret_cast<Type*>(&Data);
 	}
+
+	template<>
+	BPObject* GetValue<BPObject*>()
+	{
+		unsigned int* PtrAddr = reinterpret_cast<unsigned int*>(&Data);
+		BPObject* Obj = (BPObject*)(*PtrAddr);
+		return Obj;
+	}
+
+private:
+	ValueTypes ValueType;
 };
+
+#endif
 
