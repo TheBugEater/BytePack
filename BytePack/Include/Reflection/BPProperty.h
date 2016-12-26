@@ -1,7 +1,7 @@
 #pragma once
 #ifndef __BP_PROPERTY_H__
 #define __BP_PROPERTY_H__
-#include "../BPVariant.h"
+#include "Reflection/BPVariant.h"
 
 class AbstractProperty
 {
