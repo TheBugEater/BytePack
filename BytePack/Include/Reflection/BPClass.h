@@ -68,10 +68,10 @@ public:
 	inline TypeProperties& GetProperties() { return Properties; }
 
 	template<class ClassType>
-	void SetPropertyValue(ClassType* obj, BPSmartPtr<BPVariant> value, std::string name);
+	void SetPropertyValue(ClassType* obj, BPSmartPtr<BPAny> value, std::string name);
 
 	template<class ClassType>
-	BPSmartPtr<BPVariant> GetPropertyValue(ClassType* obj, std::string name);
+	BPSmartPtr<BPAny> GetPropertyValue(ClassType* obj, std::string name);
 
 	void AddProperty(AbstractProperty* property);
 
@@ -87,15 +87,14 @@ private:
 	TypeProperties Properties;
 };
 
-template<class ClassType>
-void BPClass::SetPropertyValue(ClassType* obj, BPSmartPtr<BPVariant> value, std::string name)
+template<class ClassType> void BPClass::SetPropertyValue(ClassType* obj, BPSmartPtr<BPAny> value, std::string name)
 {
 	auto Property = Properties[std::hash<std::string>{}(name)];
 	ClassObj->SetValue(value, obj);
 }
 
 template<class ClassType>
-BPSmartPtr<BPVariant> BPClass::GetPropertyValue(ClassType* obj, std::string name)
+BPSmartPtr<BPAny> BPClass::GetPropertyValue(ClassType* obj, std::string name)
 {
 	auto Property = Properties[std::hash<std::string>{}(name)];
 	return Property->GetValue(obj);
@@ -121,8 +120,7 @@ public:
 	template<class MemberType>
 	BPClassBuilder<T>& Property(MemberType T::* member, std::string name, unsigned int flags)
 	{
-		Properties.push_back(new MemberProperty<T, MemberType>(member, name, "", flags));
-		return *this;
+		return Property(member, name, "", flags);
 	}
 
 	BPClass* Build()

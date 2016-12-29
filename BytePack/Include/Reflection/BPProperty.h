@@ -1,7 +1,9 @@
 #pragma once
 #ifndef __BP_PROPERTY_H__
 #define __BP_PROPERTY_H__
-#include "Reflection/BPVariant.h"
+#include "Reflection/BPAny.h"
+
+class BPObject;
 
 class AbstractProperty
 {
@@ -11,7 +13,6 @@ public:
 	std::string PropertyName;
 	std::string PropertyDescription;
 	unsigned int PropertyFlags;
-	ValueTypes ValueType;
 
 	AbstractProperty(std::string name, std::string description, unsigned int flags)
 	{
@@ -20,8 +21,8 @@ public:
 		PropertyFlags = flags;
 	}
 
-	virtual BPSmartPtr<BPVariant> GetValue(BPObject* object) = 0;
-	virtual void SetValue(BPSmartPtr<BPVariant> value, BPObject* object) = 0;
+	virtual BPSmartPtr<BPAny> GetValue(BPObject* object) = 0;
+	virtual void SetValue(BPSmartPtr<BPAny> value, BPObject* object) = 0;
 };
 
 template<class ClassType, class MemberType>
@@ -34,18 +35,48 @@ public:
 		: AbstractProperty(name, description, flags)
 		, Member(member)
 	{
-		ValueType = ToValueType<MemberType>();
 	}
 
-	virtual BPSmartPtr<BPVariant> GetValue(BPObject* object) override
+	virtual BPSmartPtr<BPAny> GetValue(BPObject* object) override
 	{
-		BPVariant* value = new BPVariant();
 		ClassType* ClassObj = dynamic_cast<ClassType*>(object);
-		value->SetValue<MemberType>(ClassObj->*Member);
+
+		BPAny* value = new BPAny(ClassObj->*Member);
 		return value;
 	}
 
-	virtual void SetValue(BPSmartPtr<BPVariant> value, BPObject* object) override
+	virtual void SetValue(BPSmartPtr<BPAny> value, BPObject* object) override
+	{
+		ClassType* ClassObj = dynamic_cast<ClassType*>(object);
+		ClassObj->*Member = value->GetValue<MemberType>();
+	}
+
+	MemberPointer Member;
+};
+
+template<class ClassType>
+class MemberProperty<ClassType, BPObject*> : public AbstractProperty
+{
+public:
+
+	typedef BPObject* ClassType::* MemberPointer;
+	MemberProperty(MemberPointer member, std::string name, std::string description, unsigned int flags)
+		: AbstractProperty(name, description, flags)
+		, Member(member)
+	{
+	}
+
+	virtual BPSmartPtr<BPAny> GetValue(BPObject* object) override
+	{
+		ClassType* ClassObj = dynamic_cast<ClassType*>(object);
+
+		BPAny* value = new BPAny();
+		value->SetValue<BPObject*>(ClassObj->*Member);
+
+		return value;
+	}
+
+	virtual void SetValue(BPSmartPtr<BPAny> value, BPObject* object) override
 	{
 		ClassType* ClassObj = dynamic_cast<ClassType*>(object);
 		ClassObj->*Member = value->GetValue<MemberType>();

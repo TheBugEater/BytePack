@@ -2,24 +2,13 @@
 #ifndef __BP_VARIANT_H__
 #define __BP_VARIANT_H__
 
-#include "Reflection/BPSmartPtr.h"
+#include "Reflection/BPAny.h"
 #include <type_traits>
 #include <string>
 #include <assert.h>
+#include <vector>
 
 class BPObject;
-
-enum class ValueTypes
-{
-	TypeChar,
-	TypeBool,
-	TypeInt,
-	TypeFloat,
-	TypeDouble,
-	TypeLong,
-	TypeString,
-	TypeObject
-};
 
 template<typename Type>
 static ValueTypes ToValueType()

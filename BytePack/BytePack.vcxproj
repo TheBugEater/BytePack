@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Reflection\BPAny.h" />
     <ClInclude Include="Include\Reflection\BPClass.h" />
     <ClInclude Include="Include\Reflection\BPClassFactory.h" />
     <ClInclude Include="Include\Reflection\BPObject.h" />

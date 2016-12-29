@@ -7,6 +7,10 @@ BPClassFactory::BPClassFactory()
 {
 }
 
+BPClassFactory::~BPClassFactory()
+{
+}
+
 BPClassFactory* BPClassFactory::Instance()
 {
 	if (!StaticInstance)

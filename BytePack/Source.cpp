@@ -26,12 +26,14 @@ class Test2 : public BPObject
 	BP_REFLECT(Test2)
 
 	char Character;
+	std::string name;
 	Test* test;
 };
 
 BP_BEGIN_CLASS(Test2, BPObject)
 .Property(&Test2::Character, "character", "Char Example", Readable | Writable)
 .Property(&Test2::test, "test", "Reflecting a Pointer Object", Readable)
+.Property(&Test2::name, "name", "Reflecting a String Object", Readable)
 .Build()
 BP_END_CLASS(Test2)
 
@@ -46,7 +48,7 @@ void PopulateClass(BPObject* Object)
 
 		if (val->GetType() == ValueTypes::TypeObject)
 		{
-			PopulateClass(val->GetValue<BPObject*>());
+			//PopulateClass(val->GetValue<BPObject*>());
 		}
 		else if (val->GetType() == ValueTypes::TypeInt)
 		{
@@ -59,6 +61,10 @@ void PopulateClass(BPObject* Object)
 		else if (val->GetType() == ValueTypes::TypeFloat)
 		{
 			std::cout << val->GetValue<float>() << std::endl;
+		}
+		else if (val->GetType() == ValueTypes::TypeString)
+		{
+			std::cout << val->GetValue<std::string>() << std::endl;
 		}
 		std::cout << std::endl;
 		++it;
@@ -88,6 +94,7 @@ int main()
 	test1.floatVal = 520.042f;
 	Test2 test2;
 	test2.Character = 'H';
+	test2.name = "Dilhan Geeth";
 	test2.test = &test1;
 
 	PopulateClass(&test2);

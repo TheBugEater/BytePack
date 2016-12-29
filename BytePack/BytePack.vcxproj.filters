@@ -39,6 +39,9 @@
     <ClInclude Include="Include\Reflection\BPVariant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Reflection\BPAny.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Reflection\BPClass.cpp">

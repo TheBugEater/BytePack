@@ -10,6 +10,8 @@ class BPClassFactory
 
 public:
 
+	~BPClassFactory();
+
 	static BPClassFactory* Instance();
 
 	void RegisterClass(class BPClass* Class);
