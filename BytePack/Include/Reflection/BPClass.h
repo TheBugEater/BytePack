@@ -9,7 +9,7 @@
 #include <map>
 #include <vector>
 
-enum PropertyFlags
+enum EPropertyFlags 
 {
 	Writable = (0 << 0),
 	Readable = (0 << 1),

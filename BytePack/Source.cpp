@@ -16,8 +16,8 @@ class Test : public BPObject
 };
 
 BP_BEGIN_CLASS(Test, BPObject)
-.Property(&Test::ID, "id", "An Integer for Saving the ID", Readable | Writable)
-.Property(&Test::floatVal, "floatVal", "A Float Value", Readable | Writable)
+.Property(&Test::ID, "id", "An Integer for Saving the ID", EPropertyFlags::ReadWrite)
+.Property(&Test::floatVal, "floatVal", "A Float Value", EPropertyFlags::ReadWrite)
 .Build()
 BP_END_CLASS(Test)
 
@@ -31,9 +31,9 @@ class Test2 : public BPObject
 };
 
 BP_BEGIN_CLASS(Test2, BPObject)
-.Property(&Test2::Character, "character", "Char Example", Readable | Writable)
-.Property(&Test2::test, "test", "Reflecting a Pointer Object", Readable)
-.Property(&Test2::name, "name", "Reflecting a String Object", Readable)
+.Property(&Test2::Character, "character", "Char Example", EPropertyFlags::ReadWrite)
+.Property(&Test2::test, "test", "Reflecting a Pointer Object", EPropertyFlags::ReadWrite)
+.Property(&Test2::name, "name", "Reflecting a String Object", EPropertyFlags::ReadWrite)
 .Build()
 BP_END_CLASS(Test2)
 
@@ -48,7 +48,7 @@ void PopulateClass(BPObject* Object)
 
 		if (val->GetType() == ValueTypes::TypeObject)
 		{
-			//PopulateClass(val->GetValue<BPObject*>());
+			PopulateClass(val->GetValue<BPObject*>());
 		}
 		else if (val->GetType() == ValueTypes::TypeInt)
 		{

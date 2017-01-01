@@ -56,25 +56,6 @@ static ValueTypes ToValueType(size_t type_hash)
 
 #define SAFE_DELETE_PTR(x) { if(x) { delete x; x = nullptr; } }
 
-template<typename T>
-static bool IsPointer()
-{
-	if (std::is_pointer<T>())
-	{
-		return true;
-	}
-	else if (std::is_member_pointer<T>())
-	{
-		return true;
-	}
-	else if (std::is_member_object_pointer<T>())
-	{
-		return true;
-	}
-
-	return false;
-}
-
 class BPAny : public BPSmartPtrObj
 {
 public:
@@ -110,7 +91,6 @@ public:
 	BPAny& operator=(const BPAny&& value)
 	{
 		this->Content = value.Content;
-		value.~BPAny();
 		return *this;
 	}
 

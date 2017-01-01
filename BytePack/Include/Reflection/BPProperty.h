@@ -54,35 +54,4 @@ public:
 	MemberPointer Member;
 };
 
-template<class ClassType>
-class MemberProperty<ClassType, BPObject*> : public AbstractProperty
-{
-public:
-
-	typedef BPObject* ClassType::* MemberPointer;
-	MemberProperty(MemberPointer member, std::string name, std::string description, unsigned int flags)
-		: AbstractProperty(name, description, flags)
-		, Member(member)
-	{
-	}
-
-	virtual BPSmartPtr<BPAny> GetValue(BPObject* object) override
-	{
-		ClassType* ClassObj = dynamic_cast<ClassType*>(object);
-
-		BPAny* value = new BPAny();
-		value->SetValue<BPObject*>(ClassObj->*Member);
-
-		return value;
-	}
-
-	virtual void SetValue(BPSmartPtr<BPAny> value, BPObject* object) override
-	{
-		ClassType* ClassObj = dynamic_cast<ClassType*>(object);
-		ClassObj->*Member = value->GetValue<MemberType>();
-	}
-
-	MemberPointer Member;
-};
-
 #endif
