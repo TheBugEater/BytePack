@@ -13,7 +13,7 @@ enum EPropertyFlags
 {
 	Writable = (0 << 0),
 	Readable = (0 << 1),
-	ReadWrite = (Writable + Readable)
+	ReadWrite = (Writable | Readable)
 };
 
 #define BP_REFLECT(CLASS) \
@@ -55,6 +55,7 @@ public:
 	BPClass(BPClass* base, std::string name)
 		: SuperClass(base)
 		, ClassName(name)
+		, PropertyHead(nullptr)
 	{
 		BPClassFactory::Instance()->RegisterClass(this);
 	}
@@ -85,6 +86,8 @@ private:
 	BPClass* NextClass;
 
 	TypeProperties Properties;
+
+	AbstractProperty* PropertyHead;
 };
 
 template<class ClassType> void BPClass::SetPropertyValue(ClassType* obj, BPSmartPtr<BPAny> value, std::string name)

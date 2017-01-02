@@ -7,6 +7,10 @@ class BPObject;
 
 class AbstractProperty
 {
+private:
+	AbstractProperty* Next;
+	friend class BPClass;
+
 public:
 	virtual ~AbstractProperty() {}
 
@@ -20,6 +24,8 @@ public:
 		PropertyDescription = description;
 		PropertyFlags = flags;
 	}
+
+	AbstractProperty* GetNext() const { return Next; }
 
 	virtual BPSmartPtr<BPAny> GetValue(BPObject* object) = 0;
 	virtual void SetValue(BPSmartPtr<BPAny> value, BPObject* object) = 0;

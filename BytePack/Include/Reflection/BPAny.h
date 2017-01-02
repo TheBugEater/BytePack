@@ -90,6 +90,7 @@ public:
 
 	BPAny& operator=(const BPAny&& value)
 	{
+		SAFE_DELETE_PTR(Content);
 		this->Content = value.Content;
 		return *this;
 	}
