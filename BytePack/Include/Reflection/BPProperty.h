@@ -52,12 +52,12 @@ public:
 
 	type& GetValue(void* obj) 
 	{ 
-		return *(type*)((unsigned int)obj + MemberOffset); 
+		return *(type*)((PTR_TO_UINT)obj + MemberOffset); 
 	} 
 
 	void SetValue(void* obj, const type& value) 
 	{ 
-		*(type*)((unsigned int)obj + MemberOffset) = value;
+		*(type*)((PTR_TO_UINT)obj + MemberOffset) = value;
 	}
 };
 
@@ -75,12 +75,12 @@ public:\
 \
 	type& GetValue(void* obj) \
 	{ \
-		return *(type*)((unsigned int)obj + MemberOffset); \
+		return *(type*)((PTR_TO_UINT)obj + MemberOffset); \
 	} \
 \
 	void SetValue(void* obj, const type& value) \
 	{ \
-		*(type*)((unsigned int)obj + MemberOffset) = value;\
+		*(type*)((PTR_TO_UINT)obj + MemberOffset) = value;\
 	}\
 };
 
@@ -102,19 +102,19 @@ class BPPropertyT<std::string> : public BPProperty
 {
 public:
 	BPPropertyT(size_t memberOffset, std::string name, std::string description, unsigned int flags)
-		: BPProperty(memberOffset, name, description, flags, Type_String)
+		: BPProperty(memberOffset, name, description, flags, Type_string)
 	{
 
 	}
 
 	std::string& GetValue(void* obj)
 	{ 
-		return *(std::string*)((unsigned int)obj + MemberOffset); 
+		return *(std::string*)((PTR_TO_UINT)obj + MemberOffset); 
 	} 
 
 	void SetValue(void* obj, const std::string& value) 
 	{ 
-		*(std::string*)((unsigned int)obj + MemberOffset) = value;
+		*(std::string*)((PTR_TO_UINT)obj + MemberOffset) = value;
 	}
 
 };
@@ -124,19 +124,19 @@ class BPPropertyT<BPObject*> : public BPProperty
 {
 public:
 	BPPropertyT(size_t memberOffset, std::string name, std::string description, unsigned int flags)
-		: BPProperty(memberOffset, name, description, flags, Type_Object)
+		: BPProperty(memberOffset, name, description, flags, Type_object)
 	{
 
 	}
 
 	BPObject* GetValue(void* obj)
 	{ 
-		return *(BPObject**)((unsigned int)obj + MemberOffset); 
+		return *(BPObject**)((PTR_TO_UINT)obj + MemberOffset); 
 	} 
 
 	void SetValue(void* obj, const BPObject* value) 
 	{ 
-		*(BPObject**)((unsigned int)obj + MemberOffset) = (BPObject*)value;
+		*(BPObject**)((PTR_TO_UINT)obj + MemberOffset) = (BPObject*)value;
 	}
 
 };
@@ -169,9 +169,9 @@ static BPSmartPtr<BPAny> PropertyGetValue(BPProperty* property, void* obj)
 		return new BPAny(dynamic_cast<BPPropertyT<char>*>(property)->GetValue(obj));
 	case Type_double:
 		return new BPAny(dynamic_cast<BPPropertyT<double>*>(property)->GetValue(obj));
-	case Type_Object:
+	case Type_object:
 		return new BPAny(dynamic_cast<BPPropertyT<BPObject*>*>(property)->GetValue(obj));
-	case Type_String:
+	case Type_string:
 		return new BPAny(dynamic_cast<BPPropertyT<std::string>*>(property)->GetValue(obj));
 	case Type_NONE:
 	default:
@@ -220,10 +220,10 @@ static void PropertySetValue(BPProperty* property, void* obj, BPSmartPtr<BPAny> 
 	case Type_double:
 		dynamic_cast<BPPropertyT<double>*>(property)->SetValue(obj, value->GetValue<double>());
 		break;
-	case Type_Object:
+	case Type_object:
 		dynamic_cast<BPPropertyT<BPObject*>*>(property)->SetValue(obj, value->GetValue<BPObject*>());
 		break;
-	case Type_String:
+	case Type_string:
 		dynamic_cast<BPPropertyT<std::string>*>(property)->SetValue(obj, value->GetValue<std::string>());
 		break;
 	case Type_NONE:

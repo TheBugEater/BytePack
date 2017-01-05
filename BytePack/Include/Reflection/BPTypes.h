@@ -22,6 +22,12 @@ typedef uint16				CHAR16;		// A 16-bit character type
 typedef uint32				CHAR32;		// A 32-bit character type 
 typedef WIDECHAR			TCHAR;		// A switchable character  
 
+#ifdef _WIN64
+#define PTR_TO_UINT uint64
+#elif _WIN32
+#define PTR_TO_UINT uint32
+#endif
+
 #define DEFINE_TYPE(num, type) Type_##type = num,
 
 enum ETypeNames
@@ -39,8 +45,8 @@ enum ETypeNames
 	DEFINE_TYPE(10, double)
 	DEFINE_TYPE(11, bool)
 	DEFINE_TYPE(12, char)
-	DEFINE_TYPE(13, Object)
-	DEFINE_TYPE(14, String)
+	DEFINE_TYPE(13, object)
+	DEFINE_TYPE(14, string)
 };
 
 #define TYPE_NAME_TEST_RETURN(type, type_hash) \
@@ -66,12 +72,12 @@ static ETypeNames ToValueType(size_t type_hash)
 
 	if(typeid(class BPObject*).hash_code() == type_hash) 
 	{
-		return ETypeNames::Type_Object;
+		return ETypeNames::Type_object;
 	}
 
 	if(typeid(std::string).hash_code() == type_hash) 
 	{
-		return ETypeNames::Type_String;
+		return ETypeNames::Type_string;
 	}
 
 	return ETypeNames::Type_NONE;
