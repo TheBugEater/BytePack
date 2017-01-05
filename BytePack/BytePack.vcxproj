@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BPBuffer.h" />
+    <ClInclude Include="Include\Serialization\BPBinaryStream.h" />
     <ClInclude Include="Include\Reflection\BPAny.h" />
     <ClInclude Include="Include\Reflection\BPClass.h" />
     <ClInclude Include="Include\Reflection\BPClassFactory.h" />
@@ -27,8 +29,12 @@
     <ClInclude Include="Include\Reflection\BPSmartPtr.h" />
     <ClInclude Include="Include\Reflection\BPTypes.h" />
     <ClInclude Include="Include\Reflection\BPVariant.h" />
+    <ClInclude Include="Include\Serialization\IBPStream.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BPBuffer.cpp" />
+    <ClCompile Include="Source\Serialization\BPBinaryStream.cpp" />
+    <ClCompile Include="Source\Serialization\IBPStream.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Source\Reflection\BPClass.cpp" />
     <ClCompile Include="Source\Reflection\BPClassFactory.cpp" />

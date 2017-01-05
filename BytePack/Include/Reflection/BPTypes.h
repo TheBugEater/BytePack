@@ -1,6 +1,7 @@
 #pragma once
 #ifndef __BP_TYPES_H__
 #define __BP_TYPES_H__
+#include <string>
 
 // Unsigned base types.
 typedef unsigned char 		uint8;		// 8-bit  unsigned.

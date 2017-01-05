@@ -22,4 +22,23 @@ void BPClass::AddProperty(BPProperty* property)
 	PropertyHead = property;
 }
 
+void BPClass::Serialize(class IBPStream* stream, class BPObject* Object)
+{
+	if(SuperClass)
+		SuperClass->Serialize(stream, Object);
+
+	BPProperty* Property = PropertyHead;
+	while (Property)
+	{
+		Property->SerializeProperty(*stream, Object);
+		Property = Property->Next;
+	}
+}
+
+void BPClass::Deserialize(class IBPStream* stream, class BPObject* Object)
+{
+	if(SuperClass)
+		SuperClass->Deserialize(stream, Object);
+}
+
 

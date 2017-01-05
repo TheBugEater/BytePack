@@ -2,6 +2,7 @@
 #include "Reflection/BPSmartPtr.h"
 #include "Reflection/BPTypes.h"
 #include <string>
+#include "Serialization/IBPStream.h"
 
 class BPProperty : public BPSmartPtrObj
 {
@@ -22,6 +23,16 @@ public:
 	ETypeNames GetPropertyType() const { return PropertyType; }
 
 	BPSmartPtr<BPProperty> GetNext() const { return Next; }
+
+	virtual void SerializeProperty(class IBPStream& stream, class BPObject* object)
+	{
+
+	}
+
+	virtual void DeserializeProperty(class IBPStream& stream, class BPObject* object)
+	{
+
+	}
 
 protected:
 	size_t MemberOffset;
@@ -59,6 +70,17 @@ public:
 	{ 
 		*(type*)((PTR_TO_UINT)obj + MemberOffset) = value;
 	}
+
+	virtual void SerializeProperty(class IBPStream& stream, class BPObject* object)
+	{
+		stream << GetValue(object);
+	}
+
+	virtual void DeserializeProperty(class IBPStream& stream, class BPObject* object)
+	{
+
+	}
+
 };
 
 #define DEFINE_NUMERIC_PROPERTY(type) \
@@ -82,6 +104,17 @@ public:\
 	{ \
 		*(type*)((PTR_TO_UINT)obj + MemberOffset) = value;\
 	}\
+\
+	virtual void SerializeProperty(class IBPStream& stream, class BPObject* object)\
+	{\
+		stream << (type)GetValue(object);\
+	}\
+\
+	virtual void DeserializeProperty(class IBPStream& stream, class BPObject* object)\
+	{\
+\
+	}\
+\
 };
 
 DEFINE_NUMERIC_PROPERTY(char)
@@ -117,6 +150,15 @@ public:
 		*(std::string*)((PTR_TO_UINT)obj + MemberOffset) = value;
 	}
 
+	virtual void SerializeProperty(class IBPStream& stream, class BPObject* object)
+	{
+		stream << GetValue(object);
+	}
+
+	virtual void DeserializeProperty(class IBPStream& stream, class BPObject* object)
+	{
+
+	}
 };
 
 template<>
@@ -139,6 +181,15 @@ public:
 		*(BPObject**)((PTR_TO_UINT)obj + MemberOffset) = (BPObject*)value;
 	}
 
+	virtual void SerializeProperty(class IBPStream& stream, class BPObject* object)
+	{
+		stream << GetValue(object);
+	}
+
+	virtual void DeserializeProperty(class IBPStream& stream, class BPObject* object)
+	{
+
+	}
 };
 
 static BPSmartPtr<BPAny> PropertyGetValue(BPProperty* property, void* obj)

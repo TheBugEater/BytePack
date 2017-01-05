@@ -67,7 +67,7 @@ public:
 		BPClassFactory::Instance()->RegisterClass(this);
 	}
 
-	virtual ~BPClass();
+	virtual	~BPClass();
 
 	virtual BPSmartPtr<class BPObject> CreateInstance() { return nullptr; } 
 
@@ -82,6 +82,9 @@ public:
 	BPSmartPtr<BPAny> GetPropertyValue(ClassType* obj, std::string name);
 
 	void AddProperty(BPProperty* property);
+
+	void Serialize(class IBPStream* stream, class BPObject* Object);
+	void Deserialize(class IBPStream* stream, class BPObject* Object);
 
 private:
 

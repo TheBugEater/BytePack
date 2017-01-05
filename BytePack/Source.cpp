@@ -6,6 +6,7 @@
 #include <conio.h>
 #include <iostream>
 #include "Reflection\BPObject.h"
+#include "Include\Serialization\BPBinaryStream.h"
 
 class Test : public BPObject
 {
@@ -65,6 +66,9 @@ int main()
 	test2.test = &test1;
 
 	Test::StaticClass->SetPropertyValue("id", &test1, new BPAny((uint64)43));
+
+	BPSmartPtr<BPBinaryStream> Stream = new BPBinaryStream();
+	Stream->Serialize(&test2);
 
 	_getch();
 }
