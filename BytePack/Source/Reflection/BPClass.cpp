@@ -12,9 +12,9 @@ BPClass::~BPClass()
 	Properties.clear();
 }
 
-void BPClass::AddProperty(AbstractProperty* property)
+void BPClass::AddProperty(BPProperty* property)
 {
-	Properties[std::hash<std::string>{}(property->PropertyName)] = property;
+	Properties[std::hash<std::string>{}(property->GetName())] = property;
 
 	property->Next = PropertyHead;
 	PropertyHead = property;

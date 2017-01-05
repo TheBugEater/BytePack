@@ -3,13 +3,14 @@
 #define __BP_CLASS_H__
 
 #include "Reflection/BPClassFactory.h"
+#include "Reflection/BPAny.h"
 #include "Reflection/BPProperty.h"
 #include "Reflection/BPSmartPtr.h"
 
 #include <map>
 #include <vector>
 
-enum EPropertyFlags 
+enum EPropertyFlags
 {
 	Writable = (0 << 0),
 	Readable = (0 << 1),
@@ -47,9 +48,15 @@ private: \
 CLASS##Class __##CLASS##ClassObj; \
 BPClass* CLASS::StaticClass = &__##CLASS##ClassObj; 
 
+template<typename T, typename U> 
+static constexpr size_t OffsetOf(U T::*member)
+{
+	return (char*)&((T*)nullptr->*member) - (char*)nullptr;
+}
+
 class BPClass
 {
-	typedef std::map<size_t, class AbstractProperty*> TypeProperties;
+	typedef std::map<size_t, class BPProperty*> TypeProperties;
 
 public:
 	BPClass(BPClass* base, std::string name)
@@ -69,12 +76,12 @@ public:
 	inline TypeProperties& GetProperties() { return Properties; }
 
 	template<class ClassType>
-	void SetPropertyValue(ClassType* obj, BPSmartPtr<BPAny> value, std::string name);
+	void SetPropertyValue(std::string name, ClassType* obj, BPSmartPtr<BPAny> value);
 
 	template<class ClassType>
 	BPSmartPtr<BPAny> GetPropertyValue(ClassType* obj, std::string name);
 
-	void AddProperty(AbstractProperty* property);
+	void AddProperty(BPProperty* property);
 
 private:
 
@@ -87,20 +94,26 @@ private:
 
 	TypeProperties Properties;
 
-	AbstractProperty* PropertyHead;
+	BPProperty* PropertyHead;
 };
 
-template<class ClassType> void BPClass::SetPropertyValue(ClassType* obj, BPSmartPtr<BPAny> value, std::string name)
+template<class ClassType> void BPClass::SetPropertyValue(std::string name, ClassType* obj,  BPSmartPtr<BPAny> value)
 {
 	auto Property = Properties[std::hash<std::string>{}(name)];
-	ClassObj->SetValue(value, obj);
+	PropertySetValue(Property, obj, value);
 }
 
 template<class ClassType>
 BPSmartPtr<BPAny> BPClass::GetPropertyValue(ClassType* obj, std::string name)
 {
 	auto Property = Properties[std::hash<std::string>{}(name)];
-	return Property->GetValue(obj);
+	return PropertyGetValue(Property, obj);
+}
+
+#define DEFINE_PROPERTY_BUILD_TYPE(type) \
+void AddProperty(type dummy, size_t offset, std::string name, std::string description, uint32 flags = 2) \
+{ \
+	Properties.push_back(new BPPropertyT<type>(offset, name, description, flags)); \
 }
 
 template<class T>
@@ -112,19 +125,33 @@ public:
 	{
 
 	}
+	
+	DEFINE_PROPERTY_BUILD_TYPE(uint8)
+	DEFINE_PROPERTY_BUILD_TYPE(uint16)
+	DEFINE_PROPERTY_BUILD_TYPE(uint32)
+	DEFINE_PROPERTY_BUILD_TYPE(uint64)
+	DEFINE_PROPERTY_BUILD_TYPE(int8)
+	DEFINE_PROPERTY_BUILD_TYPE(int16)
+	DEFINE_PROPERTY_BUILD_TYPE(int32)
+	DEFINE_PROPERTY_BUILD_TYPE(int64)
+	DEFINE_PROPERTY_BUILD_TYPE(float)
+	DEFINE_PROPERTY_BUILD_TYPE(double)
+	DEFINE_PROPERTY_BUILD_TYPE(bool)
+	DEFINE_PROPERTY_BUILD_TYPE(char)
+	DEFINE_PROPERTY_BUILD_TYPE(BPObject*)
 
-	template<class MemberType>
-	BPClassBuilder<T>& Property(MemberType T::* member, std::string name, std::string description = "", unsigned int flags = 2)
+	void AddProperty(std::string dummy, size_t offset, std::string name, std::string description, uint32 flags)
 	{
-		Properties.push_back(new MemberProperty<T, MemberType>(member, name, description, flags));
+		Properties.push_back(new BPPropertyT<std::string>(offset, name, description, flags)); 
+	}
+
+	template<typename MemberType>
+	BPClassBuilder<T>& Property(MemberType T::* member, std::string name, std::string description, uint32 flags = 2)
+	{ 
+		AddProperty(MemberType(), OffsetOf(member), name, description, flags);
 		return *this;
 	}
 
-	template<class MemberType>
-	BPClassBuilder<T>& Property(MemberType T::* member, std::string name, unsigned int flags)
-	{
-		return Property(member, name, "", flags);
-	}
 
 	BPClass* Build()
 	{
@@ -138,7 +165,7 @@ public:
 private:
 	BPClass* ClassObject;
 
-	std::vector<AbstractProperty*> Properties;
+	std::vector<BPProperty*> Properties;
 };
 
 

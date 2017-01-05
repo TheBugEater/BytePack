@@ -11,7 +11,7 @@ class Test : public BPObject
 {
 	BP_REFLECT(Test)
 
-	int ID;
+	uint64 ID;
 	float floatVal;
 };
 
@@ -37,40 +37,6 @@ BP_BEGIN_CLASS(Test2, BPObject)
 .Build()
 BP_END_CLASS(Test2)
 
-void PopulateClass(BPObject* Object)
-{
-	auto Class = Object->GetClass();
-	auto it = Class->GetProperties().begin();
-	while (it != Class->GetProperties().end())
-	{
-		auto val = Class->GetPropertyValue(Object, it->second->PropertyName);
-		std::cout << "Property : " << it->second->PropertyName << " = ";
-
-		if (val->GetType() == ValueTypes::TypeObject)
-		{
-			PopulateClass(val->GetValue<BPObject*>());
-		}
-		else if (val->GetType() == ValueTypes::TypeInt)
-		{
-			std::cout << val->GetValue<int>() << std::endl;
-		}
-		else if (val->GetType() == ValueTypes::TypeChar)
-		{
-			std::cout << val->GetValue<char>() << std::endl;
-		}
-		else if (val->GetType() == ValueTypes::TypeFloat)
-		{
-			std::cout << val->GetValue<float>() << std::endl;
-		}
-		else if (val->GetType() == ValueTypes::TypeString)
-		{
-			std::cout << val->GetValue<std::string>() << std::endl;
-		}
-		std::cout << std::endl;
-		++it;
-	}
-}
-
 int main()
 {
 	auto TestClass = BPClassFactory::Instance()->FindClassByName("Test");
@@ -82,7 +48,7 @@ int main()
 		auto it = Classes->GetProperties().begin();
 		while(it != Classes->GetProperties().end())
 		{
-			std::cout << "----> Property : " << it->second->PropertyName.c_str() << " | \"" << it->second->PropertyDescription.c_str()<< "\"" << std::endl;
+			std::cout << "----> Property : " << it->second->GetName().c_str() << " | \"" << it->second->GetDescription().c_str()<< "\"" << std::endl;
 			++it;
 		}
 		std::cout << "____________________" << std::endl;
@@ -90,6 +56,7 @@ int main()
 	}
 
 	Test test1;
+	size_t offset = OffsetOf(&Test::ID);
 	test1.ID = 30;
 	test1.floatVal = 520.042f;
 	Test2 test2;
@@ -97,7 +64,7 @@ int main()
 	test2.name = "Dilhan Geeth";
 	test2.test = &test1;
 
-	PopulateClass(&test2);
+	Test::StaticClass->SetPropertyValue("id", &test1, new BPAny((uint64)43));
 
 	_getch();
 }

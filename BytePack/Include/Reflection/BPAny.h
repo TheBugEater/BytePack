@@ -3,56 +3,9 @@
 #define __BP_ANY_H__
 
 #include "Reflection/BPSmartPtr.h"
+#include "Reflection/BPTypes.h"
 
 class BPObject;
-
-enum class ValueTypes
-{
-	TypeChar,
-	TypeBool,
-	TypeInt,
-	TypeFloat,
-	TypeDouble,
-	TypeLong,
-	TypeString,
-	TypeObject
-};
-
-static ValueTypes ToValueType(size_t type_hash)
-{
-	if (typeid(char).hash_code() == type_hash)
-	{
-		return ValueTypes::TypeChar;
-	}
-	else if (typeid(bool).hash_code() == type_hash)
-	{
-		return ValueTypes::TypeBool;
-	}
-	else if (typeid(int).hash_code() == type_hash)
-	{
-		return ValueTypes::TypeInt;
-	}
-	else if (typeid(float).hash_code() == type_hash)
-	{
-		return ValueTypes::TypeFloat;
-	}
-	else if (typeid(double).hash_code() == type_hash)
-	{
-		return ValueTypes::TypeDouble;
-	}
-	else if (typeid(long).hash_code() == type_hash)
-	{
-		return ValueTypes::TypeLong;
-	}
-	else if (typeid(std::string).hash_code() == type_hash)
-	{
-		return ValueTypes::TypeString;
-	}
-	else
-	{
-		return ValueTypes::TypeObject;
-	}
-}
 
 #define SAFE_DELETE_PTR(x) { if(x) { delete x; x = nullptr; } }
 
@@ -116,7 +69,7 @@ public:
 		return HolderVal->HolderContent;
 	}
 
-	ValueTypes GetType()
+	ETypeNames GetType()
 	{
 		return ToValueType(Content->GetTypeInfo().hash_code());
 	}

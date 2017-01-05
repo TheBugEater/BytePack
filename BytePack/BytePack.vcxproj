@@ -25,6 +25,7 @@
     <ClInclude Include="Include\Reflection\BPObject.h" />
     <ClInclude Include="Include\Reflection\BPProperty.h" />
     <ClInclude Include="Include\Reflection\BPSmartPtr.h" />
+    <ClInclude Include="Include\Reflection\BPTypes.h" />
     <ClInclude Include="Include\Reflection\BPVariant.h" />
   </ItemGroup>
   <ItemGroup>
