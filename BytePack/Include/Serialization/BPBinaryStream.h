@@ -3,7 +3,7 @@
 #define __BP_BINARY_STREAM_H__
 
 #include "Serialization/IBPStream.h"
-#include "../../BPBuffer.h"
+#include "Serialization/BPBuffer.h"
 
 class BPBinaryStream : public IBPStream
 {

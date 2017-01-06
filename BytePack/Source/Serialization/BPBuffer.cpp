@@ -1,4 +1,4 @@
-#include "BPBuffer.h"
+#include "Serialization/BPBuffer.h"
 
 BPBuffer::BPBuffer()
 	: CurrentOffset(0)

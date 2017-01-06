@@ -63,7 +63,7 @@ BPClass* BPClassFactory::FindClassByID(unsigned int ID)
 	return nullptr;
 }
 
-BPSmartPtr<BPObject> BPClassFactory::CreateClassInstanceByName(std::string name)
+BPObject* BPClassFactory::CreateClassInstanceByName(std::string name)
 {
 	auto Class = ReflectedClasses;
 	while (Class)

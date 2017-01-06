@@ -3,6 +3,7 @@
 #define __BP_PROPERTY_H__
 
 #include "Serialization/IBPStream.h"
+#include "Reflection/BPObject.h"
 
 class BPProperty : public BPSmartPtrObj
 {
@@ -192,12 +193,13 @@ public:
 
 	virtual void SerializeProperty(class IBPStream& stream, class BPObject* object)
 	{
-		uint32 Size = MemberSize;
+		size_t Size = MemberSize;
 		BPObject* ValueObj = GetValue(object);
 		Size = ValueObj ? Size : 0;
 		stream << Size;
 		if (ValueObj)
 		{
+			stream << ValueObj->GetClassName();
 			stream << ValueObj;
 		}
 	}
@@ -208,6 +210,25 @@ public:
 		stream >> size;
 		if (size > 0)
 		{
+			std::string ClassName;
+			stream >> ClassName;
+
+			BPObject* ValueObj = BPClassFactory::Instance()->CreateClassInstanceByName(ClassName);
+			if (ValueObj)
+			{
+				stream >> ValueObj;
+
+				// If the Pointer is already initialized, We dont need a new one, Just read the stream to maintain the hierarchy
+				BPObject* checkVal = GetValue(object);
+				if (!checkVal)
+				{
+					SetValue(object, ValueObj);
+				}
+				else
+				{
+					SAFE_DELETE_PTR(ValueObj);
+				}
+			}
 		}
 	}
 };

@@ -23,7 +23,7 @@ public:
 	BPClass* FindClassByName(std::string name);
 	BPClass* FindClassByID(unsigned int ID);
 
-	BPSmartPtr<class BPObject> CreateClassInstanceByName(std::string name);
+	class BPObject* CreateClassInstanceByName(std::string name);
 
 private:
 	class BPClass* ReflectedClasses;

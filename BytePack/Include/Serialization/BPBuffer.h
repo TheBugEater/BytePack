@@ -18,13 +18,13 @@ public:
 
 	uint8* GetBuffer() const;
 
-	uint32 GetBufferSize() const { return BufferSize; }
+	size_t GetBufferSize() const { return BufferSize; }
 
 private:
 	std::vector<uint8> Buffer;
 
-	uint32 CurrentOffset;
-	uint32 BufferSize;
+	size_t CurrentOffset;
+	size_t BufferSize;
 };
 
 #endif

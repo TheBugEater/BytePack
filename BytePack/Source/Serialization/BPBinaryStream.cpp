@@ -122,7 +122,7 @@ void BPBinaryStream::Serialize(double& value)
 
 void BPBinaryStream::Serialize(std::string& value)
 {
-	uint32 stringSize = value.size();
+	uint32 stringSize = (uint32)value.size();
 	Buffer.Write((char*)&stringSize, sizeof(uint32));
 
 	Buffer.Write((char*)value.c_str(), stringSize);

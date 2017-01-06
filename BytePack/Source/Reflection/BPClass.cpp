@@ -1,4 +1,5 @@
 #include "Reflection/BPClass.h"
+#include "Reflection/BPProperty.h"
 
 BPClass::~BPClass()
 {

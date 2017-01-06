@@ -51,7 +51,10 @@
     <ClInclude Include="Include\Serialization\BPBinaryStream.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BPBuffer.h">
+    <ClInclude Include="Include\Reflection\BPClassBuilder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Serialization\BPBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -77,7 +80,7 @@
     <ClCompile Include="Source\Serialization\BPBinaryStream.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BPBuffer.cpp">
+    <ClCompile Include="Source\Serialization\BPBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
