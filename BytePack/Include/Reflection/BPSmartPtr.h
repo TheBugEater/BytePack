@@ -57,6 +57,8 @@ public:
 		SAFE_ReleaseRef(this->Reference);
 	}
 	
+	T* GetRaw() const { return Reference; }
+
 	inline BPSmartPtr<T>& operator=(T* ref);
 	inline BPSmartPtr<T>& operator=(const BPSmartPtr<T>& ref);
 

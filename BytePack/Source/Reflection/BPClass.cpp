@@ -39,6 +39,14 @@ void BPClass::Deserialize(class IBPStream* stream, class BPObject* Object)
 {
 	if(SuperClass)
 		SuperClass->Deserialize(stream, Object);
+
+	BPProperty* Property = PropertyHead;
+	while (Property)
+	{
+		Property->DeserializeProperty(*stream, Object);
+		Property = Property->Next;
+	}
+
 }
 
 

@@ -1,14 +1,15 @@
 #pragma once
-#include "Reflection/BPSmartPtr.h"
-#include "Reflection/BPTypes.h"
-#include <string>
+#ifndef __BP_PROPERTY_H__
+#define __BP_PROPERTY_H__
+
 #include "Serialization/IBPStream.h"
 
 class BPProperty : public BPSmartPtrObj
 {
 public:
-	BPProperty(size_t memberOffset, std::string name, std::string description, unsigned int flags, ETypeNames type)
+	BPProperty(size_t memberOffset, uint32 memberSize, std::string name, std::string description, unsigned int flags, ETypeNames type)
 		: MemberOffset(memberOffset)
+		, MemberSize(memberSize)
 		, Name(name)
 		, Description(description)
 		, Flags(flags)
@@ -36,6 +37,7 @@ public:
 
 protected:
 	size_t MemberOffset;
+	size_t MemberSize;
 	
 	std::string Name;
 	std::string Description;
@@ -55,8 +57,8 @@ class BPPropertyT : public BPProperty
 {
 public:
 
-	BPPropertyT(size_t memberOffset, std::string name, std::string description, unsigned int flags)
-		: BPProperty(memberOffset, name, description, flags, Type_NONE)
+	BPPropertyT(size_t memberOffset, uint32 memberSize, std::string name, std::string description, unsigned int flags)
+		: BPProperty(memberOffset, memberSize, name, description, flags, Type_NONE)
 	{
 
 	}
@@ -78,7 +80,9 @@ public:
 
 	virtual void DeserializeProperty(class IBPStream& stream, class BPObject* object)
 	{
-
+		type value;
+		stream >> value;
+		SetValue(object, value);
 	}
 
 };
@@ -89,8 +93,8 @@ class BPPropertyT<type> : public BPProperty\
 {\
 public:\
 \
-	BPPropertyT(size_t memberOffset, std::string name, std::string description, unsigned int flags)\
-		: BPProperty(memberOffset, name, description, flags, Type_##type)\
+	BPPropertyT(size_t memberOffset, uint32 memberSize, std::string name, std::string description, unsigned int flags)\
+		: BPProperty(memberOffset, memberSize, name, description, flags, Type_##type)\
 	{\
 \
 	}\
@@ -112,6 +116,9 @@ public:\
 \
 	virtual void DeserializeProperty(class IBPStream& stream, class BPObject* object)\
 	{\
+		type value; \
+		stream >> value; \
+		SetValue(object, value); \
 \
 	}\
 \
@@ -134,8 +141,8 @@ template<>
 class BPPropertyT<std::string> : public BPProperty
 {
 public:
-	BPPropertyT(size_t memberOffset, std::string name, std::string description, unsigned int flags)
-		: BPProperty(memberOffset, name, description, flags, Type_string)
+	BPPropertyT(size_t memberOffset, uint32 memberSize, std::string name, std::string description, unsigned int flags)
+		: BPProperty(memberOffset, memberSize, name, description, flags, Type_string)
 	{
 
 	}
@@ -157,7 +164,9 @@ public:
 
 	virtual void DeserializeProperty(class IBPStream& stream, class BPObject* object)
 	{
-
+		std::string str;
+		stream >> str;
+		SetValue(object, str);
 	}
 };
 
@@ -165,8 +174,8 @@ template<>
 class BPPropertyT<BPObject*> : public BPProperty
 {
 public:
-	BPPropertyT(size_t memberOffset, std::string name, std::string description, unsigned int flags)
-		: BPProperty(memberOffset, name, description, flags, Type_object)
+	BPPropertyT(size_t memberOffset, uint32 memberSize, std::string name, std::string description, unsigned int flags)
+		: BPProperty(memberOffset, memberSize, name, description, flags, Type_object)
 	{
 
 	}
@@ -183,12 +192,23 @@ public:
 
 	virtual void SerializeProperty(class IBPStream& stream, class BPObject* object)
 	{
-		stream << GetValue(object);
+		uint32 Size = MemberSize;
+		BPObject* ValueObj = GetValue(object);
+		Size = ValueObj ? Size : 0;
+		stream << Size;
+		if (ValueObj)
+		{
+			stream << ValueObj;
+		}
 	}
 
 	virtual void DeserializeProperty(class IBPStream& stream, class BPObject* object)
 	{
-
+		uint32 size = 0;
+		stream >> size;
+		if (size > 0)
+		{
+		}
 	}
 };
 
@@ -283,3 +303,4 @@ static void PropertySetValue(BPProperty* property, void* obj, BPSmartPtr<BPAny> 
 	}
 }
 
+#endif //__BP_PROPERTY_H__

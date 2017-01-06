@@ -5,8 +5,8 @@
 
 #include <conio.h>
 #include <iostream>
-#include "Reflection\BPObject.h"
-#include "Include\Serialization\BPBinaryStream.h"
+#include "Reflection/BPObject.h"
+#include "Serialization/BPBinaryStream.h"
 
 class Test : public BPObject
 {
@@ -57,18 +57,20 @@ int main()
 	}
 
 	Test test1;
-	size_t offset = OffsetOf(&Test::ID);
 	test1.ID = 30;
 	test1.floatVal = 520.042f;
 	Test2 test2;
-	test2.Character = 'H';
-	test2.name = "Dilhan Geeth";
-	test2.test = &test1;
+	//test2.Character = 'H';
+	//test2.name = "Dilhan Geeth";
+	//test2.test = &test1;
 
 	Test::StaticClass->SetPropertyValue("id", &test1, new BPAny((uint64)43));
 
 	BPSmartPtr<BPBinaryStream> Stream = new BPBinaryStream();
-	Stream->Serialize(&test2);
+	//Stream->Serialize(&test2);
+	//Stream->SaveToFile("Hello.bin");
+	Stream->LoadFromFile("Hello.bin");
+	Stream->Deserialize(&test2);
 
 	_getch();
 }

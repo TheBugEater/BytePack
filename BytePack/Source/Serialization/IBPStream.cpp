@@ -95,3 +95,86 @@ IBPStream& operator<<(IBPStream& stream, class BPObject* value)
 	return stream;
 }
 
+IBPStream& operator>>(IBPStream& stream, int8& value)
+{
+	stream.Deserialize(value);
+	return stream;
+}
+
+IBPStream& operator>>(IBPStream& stream, int16& value)
+{
+	stream.Deserialize(value);
+	return stream;
+}
+
+IBPStream& operator>>(IBPStream& stream, int32& value)
+{
+	stream.Deserialize(value);
+	return stream;
+}
+
+IBPStream& operator>>(IBPStream& stream, int64& value)
+{
+	stream.Deserialize(value);
+	return stream;
+}
+
+IBPStream& operator>>(IBPStream& stream, uint8& value)
+{
+	stream.Deserialize(value);
+	return stream;
+}
+
+IBPStream& operator>>(IBPStream& stream, uint16& value)
+{
+	stream.Deserialize(value);
+	return stream;
+}
+
+IBPStream& operator>>(IBPStream& stream, uint32& value)
+{
+	stream.Deserialize(value);
+	return stream;
+}
+
+IBPStream& operator>>(IBPStream& stream, uint64& value)
+{
+	stream.Deserialize(value);
+	return stream;
+}
+
+IBPStream& operator>>(IBPStream& stream, char& value)
+{
+	stream.Deserialize(value);
+	return stream;
+}
+
+IBPStream& operator>>(IBPStream& stream, bool& value)
+{
+	stream.Deserialize(value);
+	return stream;
+}
+
+IBPStream& operator>>(IBPStream& stream, float& value)
+{
+	stream.Deserialize(value);
+	return stream;
+}
+
+IBPStream& operator>>(IBPStream& stream, double& value)
+{
+	stream.Deserialize(value);
+	return stream;
+}
+
+IBPStream& operator>>(IBPStream& stream, std::string& value)
+{
+	stream.Deserialize(value);
+	return stream;
+}
+
+IBPStream& operator>>(IBPStream& stream, class BPObject* value)
+{
+	stream.Deserialize(value);
+	return stream;
+}

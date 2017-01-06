@@ -64,13 +64,14 @@ public:
 		, ClassName(name)
 		, PropertyHead(nullptr)
 	{
-		BPClassFactory::Instance()->RegisterClass(this);
+		ClassID = BPClassFactory::Instance()->RegisterClass(this);
 	}
 
 	virtual	~BPClass();
 
 	virtual BPSmartPtr<class BPObject> CreateInstance() { return nullptr; } 
 
+	inline unsigned int& GetClassID() { return ClassID; }
 	inline std::string& GetClassName() { return ClassName; }
 	inline BPClass* GetBaseClass() { return SuperClass; }
 	inline TypeProperties& GetProperties() { return Properties; }
@@ -89,6 +90,7 @@ public:
 private:
 
 	std::string ClassName;
+	unsigned int ClassID;
 
 	BPClass* SuperClass;
 
@@ -114,9 +116,9 @@ BPSmartPtr<BPAny> BPClass::GetPropertyValue(ClassType* obj, std::string name)
 }
 
 #define DEFINE_PROPERTY_BUILD_TYPE(type) \
-void AddProperty(type dummy, size_t offset, std::string name, std::string description, uint32 flags = 2) \
+void AddProperty(type dummy, size_t offset, uint32 size, std::string name, std::string description, uint32 flags = 2) \
 { \
-	Properties.push_back(new BPPropertyT<type>(offset, name, description, flags)); \
+	Properties.push_back(new BPPropertyT<type>(offset, size, name, description, flags)); \
 }
 
 template<class T>
@@ -143,18 +145,17 @@ public:
 	DEFINE_PROPERTY_BUILD_TYPE(char)
 	DEFINE_PROPERTY_BUILD_TYPE(BPObject*)
 
-	void AddProperty(std::string dummy, size_t offset, std::string name, std::string description, uint32 flags)
+	void AddProperty(std::string dummy, size_t offset, uint32 size, std::string name, std::string description, uint32 flags)
 	{
-		Properties.push_back(new BPPropertyT<std::string>(offset, name, description, flags)); 
+		Properties.push_back(new BPPropertyT<std::string>(offset, size, name, description, flags)); 
 	}
 
 	template<typename MemberType>
 	BPClassBuilder<T>& Property(MemberType T::* member, std::string name, std::string description, uint32 flags = 2)
 	{ 
-		AddProperty(MemberType(), OffsetOf(member), name, description, flags);
+		AddProperty(MemberType(), OffsetOf(member), sizeof(std::remove_pointer<MemberType>::type), name, description, flags);
 		return *this;
 	}
-
 
 	BPClass* Build()
 	{

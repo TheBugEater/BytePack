@@ -3,6 +3,7 @@
 #define __BP_CLASS_FACTORY_H__
 
 #include <string>
+#include "BPSmartPtr.h"
 
 class BPClassFactory
 {
@@ -14,17 +15,22 @@ public:
 
 	static BPClassFactory* Instance();
 
-	void RegisterClass(class BPClass* Class);
+	unsigned int RegisterClass(class BPClass* Class);
 
 	BPClass* GetClasses() const { return ReflectedClasses; }
 	BPClass* GetNextClass(BPClass* Class);
 
 	BPClass* FindClassByName(std::string name);
+	BPClass* FindClassByID(unsigned int ID);
+
+	BPSmartPtr<class BPObject> CreateClassInstanceByName(std::string name);
 
 private:
 	class BPClass* ReflectedClasses;
 
 	static BPClassFactory* StaticInstance;
+	
+	unsigned int CurrentClassID;
 };
 
 #endif

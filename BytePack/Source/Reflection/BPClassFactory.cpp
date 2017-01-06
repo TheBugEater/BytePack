@@ -4,6 +4,7 @@
 BPClassFactory* BPClassFactory::StaticInstance = nullptr;
 
 BPClassFactory::BPClassFactory()
+	: CurrentClassID(0)
 {
 }
 
@@ -19,10 +20,11 @@ BPClassFactory* BPClassFactory::Instance()
 	return StaticInstance;
 }
 
-void BPClassFactory::RegisterClass(BPClass* Class)
+unsigned int BPClassFactory::RegisterClass(BPClass* Class)
 {
 	Class->NextClass = ReflectedClasses;
 	ReflectedClasses = Class;
+	return ++CurrentClassID;
 }
 
 BPClass* BPClassFactory::GetNextClass(BPClass* Class)
@@ -45,4 +47,33 @@ BPClass* BPClassFactory::FindClassByName(std::string className)
 	}
 
 	return nullptr;
+}
+
+BPClass* BPClassFactory::FindClassByID(unsigned int ID)
+{
+	auto Class = ReflectedClasses;
+	while (Class)
+	{
+		if (Class->GetClassID() == ID)
+			return Class;
+
+		Class = Class->NextClass;
+	}
+
+	return nullptr;
+}
+
+BPSmartPtr<BPObject> BPClassFactory::CreateClassInstanceByName(std::string name)
+{
+	auto Class = ReflectedClasses;
+	while (Class)
+	{
+		if (Class->GetClassName() == name)
+			return Class->CreateInstance();
+
+		Class = Class->NextClass;
+	}
+
+	return nullptr;
+
 }
