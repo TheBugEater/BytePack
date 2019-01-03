@@ -1,5 +1,5 @@
 # BytePack
-Reflection and Serialization Library Created from Scratch by Dilhan Geeth
+Reflection and Serialization Library Created from Scratch
 
 You can easily make any C++ Class Reflected by adding few macros to your code. 
 
